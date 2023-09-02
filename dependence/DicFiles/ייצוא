@@ -1,0 +1,6 @@
+pyinstaller --onefile -w MusicHandler.py
+move dist\MusicHandler.exe
+rd /s /q build
+rd /s /q dist
+del MusicHandler.spec
+exit
