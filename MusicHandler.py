@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QMenuBar, QAction, QToolBar, QVBoxLayout, QWidget, QLabel,
-                             QScrollArea, QLineEdit, QHBoxLayout, QCheckBox, QStatusBar, QMessageBox)
+                             QScrollArea, QLineEdit, QHBoxLayout, QCheckBox, QStatusBar, QMessageBox, QFileDialog)
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 import os
@@ -57,10 +57,18 @@ class MainWindow(QMainWindow):
         # create a menu bar
         menu_bar = QMenuBar(self)
         file_menu = menu_bar.addMenu("קובץ")
+
+        open_folder_action = QAction("בחר מתיקייה", self)
+        open_folder_action.triggered.connect(self.open_file)
+        file_menu.addAction(open_folder_action)
+
         exit_action = QAction("יציאה", self)
         exit_action.triggered.connect(self.close)
         file_menu.addAction(exit_action)
+
         self.setMenuBar(menu_bar)
+
+
 
         # create toolbar
         tool_bar = QToolBar("סרגל כלים", self)
@@ -108,6 +116,25 @@ class MainWindow(QMainWindow):
 # So far the initial interface has been designed
 # From here on, mainly the functions of the software operations
 
+    def open_file(self):
+        options = QFileDialog.Options()
+        options |= QFileDialog.ReadOnly  # לא לאפשר עריכת הקובץ
+        file_paths, _ = QFileDialog.getOpenFileNames(self, "פתח קובץ", "",
+                                                     "קבצי מוזיקה (*.mp3 *.wav *.flac *.ogg *.m4a *.aac *.wma *.aiff "
+                                                     "*.opus);;כל הקבצים (*.*)",
+                                                     options=options)
+        for file_path in file_paths:
+            file_ext = os.path.splitext(file_path)[1].lower()
+            if file_ext.lower() not in ['.mp3', '.wav', '.flac', '.ogg', '.m4a', '.aac', '.wma', '.aiff', '.opus']:
+                self.status_bar.showMessage("הבאת סוג קובץ שאינו נתמך")
+                continue
+            if file_path in self.audio_files_paths:  # בדיקה שהקובץ אינו כבר ברשימה
+                self.status_bar.showMessage("הבאת שיר שכבר נמצא ברשימה")
+                continue
+            self.audio_files_paths.append(file_path)
+            self.apply_text_corrections(file_path)
+            self.add_song_info_fields()
+
     def dragLeaveEvent(self, event):
         # self.drag_area.setStyleSheet("background-color: white; border: 2px dashed gray;")
         pass
@@ -127,7 +154,7 @@ class MainWindow(QMainWindow):
                 self.status_bar.showMessage("גררת סוג קובץ שאינו נתמך")
                 continue
             if file_path in self.audio_files_paths:  # Checking that the path is not already in the list
-                self.status_bar.showMessage("גררת פריט שהינו כבר ברשימה")
+                self.status_bar.showMessage("גררת שיר שהינו כבר ברשימה")
                 continue
             self.audio_files_paths.append(file_path)
             self.apply_text_corrections(file_path)
