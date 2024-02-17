@@ -330,7 +330,7 @@ class MainWindow(QMainWindow):
         text = title_edit.text()
 
         if title_edit.is_year:  # Check if this is the "year" field
-            invalid_characters = "-*+=_()*&^%$#@!~`'\|{}[],\":;?<>./"
+            invalid_characters = r"-*+=_()*&^%$#@!~`'\|{}[],\":;?<>./"
 
             title_edit.setStyleSheet("")  # Clear the background color
             if not text.isdigit() or len(text) > 4 or len(text) < 4 or any(char in invalid_characters for char in
@@ -338,21 +338,21 @@ class MainWindow(QMainWindow):
                 title_edit.setStyleSheet("background-color: #ffffb4;")
 
         elif title_edit.is_title:  # Check if this is the "title" field
-            invalid_characters = "-*=_()*&^%$#@!~`'\|{}[],\":;?<>./"
+            invalid_characters = r"-*=_()*&^%$#@!~`'\|{}[],\":;?<>./"
 
             title_edit.setStyleSheet("background-color: #ffffb4;")
             if not any(char.isdigit() or char in invalid_characters for char in text): # Checks if there are any characters or numbers that shouldn't be there
                 title_edit.setStyleSheet("")  # Clear the background color
 
         elif title_edit.is_artists:  # Check if this is the "artists" field
-            invalid_characters = "-*+=_()*&^%$#@!~`'\|{}[]\":;?<>/"
+            invalid_characters = r"-*+=_()*&^%$#@!~`'\|{}[]\":;?<>/"
 
             title_edit.setStyleSheet("background-color: #ffffb4;")
             if not any(char.isdigit() or char in invalid_characters for char in text): # Checks for characters that shouldn't be there
                 title_edit.setStyleSheet("")  # Clear the background color
 
         elif title_edit.is_track_number:  # Check if this is the "year" field
-            invalid_characters = "-*+=_()*&^%$#@!~`'\|{}[],\":;?<>./"
+            invalid_characters = r"-*+=_()*&^%$#@!~`'\|{}[],\":;?<>./"
 
             title_edit.setStyleSheet("")  # Clear the background color
             if not text.isdigit() or len(text) > 2 or len(text) < 2 or any(char in invalid_characters for char in
